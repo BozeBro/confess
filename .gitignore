@@ -1,1 +1,5 @@
 env
+__pycache__
+*.png
+text_lib
+Cardo*
