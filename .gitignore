@@ -3,3 +3,4 @@ __pycache__
 *.png
 text_lib
 Cardo*
+*secret*
