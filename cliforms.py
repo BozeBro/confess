@@ -7,36 +7,36 @@ from google.oauth2.credentials import Credentials
 from google_auth_oauthlib.flow import InstalledAppFlow
 from googleapiclient.discovery import build
 from googleapiclient.errors import HttpError
-from oauth2client import client, file, tools
-from post import makeManyIMG
-DISCOVERY_DOC = "https://forms.googleapis.com/$discovery/rest?version=v1"
-FORM_ID = r"1wSbJXHo-a3VgWktVMTrQhA3a1E_bGRHq5vsuoeMw24w"
-SCOPES = [
-    "https://www.googleapis.com/auth/forms.currentonly", 
-    "https://www.googleapis.com/auth/forms"
-    ]
-def getResponses(my_form_id : str):
+from httplib2 import Http
+from post import makeManyIMG, saveImgs
+
+
+def getcreds(scopes : List[str]) -> Credentials:
     creds = None
     # The file token.json stores the user's access and refresh tokens, and is
     # created automatically when the authorization flow completes for the first
     # time.
     if os.path.exists('token.json'):
-        creds = Credentials.from_authorized_user_file('token.json', SCOPES)
+        creds = Credentials.from_authorized_user_file('token.json', scopes)
     # If there are no (valid) credentials available, let the user log in.
     if not creds or not creds.valid:
         if creds and creds.expired and creds.refresh_token:
             creds.refresh(Request())
         else:
             flow = InstalledAppFlow.from_client_secrets_file(
-                'credentials.json', SCOPES)
+                'credentials.json', scopes)
             creds = flow.run_local_server(port=0)
         # Save the credentials for the next run
         with open('token.json', 'w') as token:
             token.write(creds.to_json())
-    with build("forms", "v1", credentials=creds, discoveryServiceUrl=DISCOVERY_DOC) as user:
-        forms = user.forms()
-        responses = forms.responses().list(formId=my_form_id).execute()
-    return responses
+    return creds
+def getResponses(my_form_id : str, discovery : str, scopes : str):
+    creds = getcreds(scopes)
+    with open('token.json', 'w') as token:
+        token.write(creds.to_json())
+    with build("forms", "v1", credentials=creds, discoveryServiceUrl=discovery) as user:
+        resps = user.forms().responses().list(formId=my_form_id).execute()
+    return resps
 
 def transformRes(responses):
     submissions = []
@@ -44,7 +44,13 @@ def transformRes(responses):
         my_id = list(resp["answers"].keys())[0]
         submission = resp["answers"][my_id]["textAnswers"]["answers"][0]["value"]
         submissions.append(submission)
-    makeManyIMG(submissions)
+    return makeManyIMG(submissions)
+# Deploy ID AKfycbzZAg_kQ4u8SxviDCKdQ_SuQ9SVLPmV-KDTawQOmYy3or-_ryb6GItJ_CI4wcg7ni2X
+# URL https://script.googleapis.com/v1/scripts/AKfycbzZAg_kQ4u8SxviDCKdQ_SuQ9SVLPmV-KDTawQOmYy3or-_ryb6GItJ_CI4wcg7ni2X:run
+def deletePosts(form_id : str, scriptId : str, scopes : str) -> None:
+    creds = getcreds(scopes)
 
-if __name__ == "__main__":
-    transformRes(getResponses(FORM_ID))
+    service = build('script', 'v1', credentials=creds)
+    req = {"function": "myFunction", "parameters" : [form_id]}
+
+    res = service.scripts().run(body=req, scriptId=scriptId).execute()
