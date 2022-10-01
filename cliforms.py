@@ -51,8 +51,6 @@ def makeNames(n: int) -> List[str]:
     names = []
     for i in range(n):
         names.append(f"img{counter + i}.png")
-    # with open("counter.txt", "w") as f:
-    #    f.write(str(counter + n))
     return names
 
 

@@ -5,7 +5,8 @@ LINK: https://docs.google.com/forms/d/e/1FAIpQLSe_fRARQb7S8Q5Y0O86vgaGueYNxQRGbZ
 from cliforms import *
 from drive import uploadImgs
 from post import saveImgs
-
+import os 
+import glob
 DISCOVERY_DOC = "https://forms.googleapis.com/$discovery/rest?version=v1"
 FORM_ID = r"1wSbJXHo-a3VgWktVMTrQhA3a1E_bGRHq5vsuoeMw24w"
 SCOPES = [
@@ -27,8 +28,11 @@ def main():
         saveImgs(imgs)
         uploadImgs(FOLDER_ID, imgs, names, SCOPES)
         deletePosts(FORM_ID, SCRIPT_ID, SCOPES)
-
-
+        deleteConfessions("./confessions")
+def deleteConfessions(path):
+    files = glob.glob(path + "/*")
+    for f in files:
+        os.remove(f)
 def getPosts():
     resps = getResponses(FORM_ID, DISCOVERY_DOC, SCOPES)
     print(resps)
