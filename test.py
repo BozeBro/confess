@@ -1,33 +1,43 @@
 """
-LINK: https://docs.google.com/forms/d/e/1FAIpQLScjF-ucQg74uK3LTr2TGiBmKw2zPN0kfnB593Z6k8FoebseRg/viewform?usp=sf_link
-Use this link for testing. Development.
-Need to change the LINK, folder_id, form_id
+FORM LINK : https://forms.gle/8B6tirfz8E5qydZ26
 """
 from cliforms import *
 from drive import uploadImgs
 from post import saveImgs
-
-DISCOVERY_DOC = "https://forms.googleapis.com/$discovery/rest?version=v1"
-FORM_ID = r"1FAIpQLScjF-ucQg74uK3LTr2TGiBmKw2zPN0kfnB593Z6k8FoebseRg"
-SCOPES = [
-    "https://www.googleapis.com/auth/forms.responses.readonly",
-    "https://www.googleapis.com/auth/forms.currentonly",
-    "https://www.googleapis.com/auth/forms",
-    "https://www.googleapis.com/auth/script.projects",
-    "https://www.googleapis.com/auth/drive",
-]
-SCRIPT_ID = "AKfycbzZAg_kQ4u8SxviDCKdQ_SuQ9SVLPmV-KDTawQOmYy3or-_ryb6GItJ_CI4wcg7ni2X"
-FOLDER_ID = "1tZ-TyWn8gBbh3fH4H6gEm89p2XTNH5k8"
+import os 
+import glob
+import json
 
 
 def main():
-    resp = getResponses(FORM_ID, DISCOVERY_DOC, SCOPES)
+    with open("google_test.json") as file:
+        data = json.load(file)
+    with open("constants.json") as file:
+        constants = json.load(file)
+    form_id = data["form_id"]
+    folder_id = data["folder_id"]
+
+    discovery_doc = constants["discovery_doc"]
+    scopes = constants["scopes"]
+    script_id  = constants["script_id"]
+    
+    resp = getResponses(form_id, discovery_doc, scopes)
     if resp:
         imgs = list(transformRes(resp))
         names = makeNames(len(imgs))
+        print(len(imgs))
         saveImgs(imgs)
-        uploadImgs(FOLDER_ID, imgs, names, SCOPES)
-        deletePosts(FORM_ID, SCRIPT_ID, SCOPES)
+        uploadImgs(folder_id, imgs, names, scopes)
+        deletePosts(form_id, script_id, scopes)
+        deleteConfessions("./confessions")
+def deleteConfessions(path):
+    files = glob.glob(path + "/*")
+    for f in files:
+        os.remove(f)
+def getPosts(form_id, discover, scopes):
+    resps = getResponses(form_id, discover, scopes)
+    print(resps)
 
 
-main()
+if __name__ == "__main__":
+    main()

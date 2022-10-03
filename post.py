@@ -2,7 +2,6 @@ from PIL import Image
 from image_utils import ImageText
 from cleantext import clean
 from typing import List
-from math import floor
 
 # Cardo, bold, #8b0203
 # returns a PIL Image

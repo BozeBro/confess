@@ -7,34 +7,36 @@ from drive import uploadImgs
 from post import saveImgs
 import os 
 import glob
-DISCOVERY_DOC = "https://forms.googleapis.com/$discovery/rest?version=v1"
-FORM_ID = r"1wSbJXHo-a3VgWktVMTrQhA3a1E_bGRHq5vsuoeMw24w"
-SCOPES = [
-    "https://www.googleapis.com/auth/forms.responses.readonly",
-    "https://www.googleapis.com/auth/forms.currentonly",
-    "https://www.googleapis.com/auth/forms",
-    "https://www.googleapis.com/auth/script.projects",
-    "https://www.googleapis.com/auth/drive",
-]
-SCRIPT_ID = "AKfycbzZAg_kQ4u8SxviDCKdQ_SuQ9SVLPmV-KDTawQOmYy3or-_ryb6GItJ_CI4wcg7ni2X"
-FOLDER_ID = "1IBawPAcd9to_j0991iTMvve54QiXxoh7"
+import json
 
 
 def main():
-    resp = getResponses(FORM_ID, DISCOVERY_DOC, SCOPES)
+    with open("google.json") as file:
+        data = json.load(file)
+    with open("constants.json") as file:
+        constants = json.load(file)
+    form_id = data["form_id"]
+    folder_id = data["folder_id"]
+
+    discovery_doc = constants["discovery_doc"]
+    scopes = constants["scopes"]
+    script_id  = constants["script_id"]
+    
+    resp = getResponses(form_id, discovery_doc, scopes)
     if resp:
         imgs = list(transformRes(resp))
         names = makeNames(len(imgs))
+        print(len(imgs))
         saveImgs(imgs)
-        uploadImgs(FOLDER_ID, imgs, names, SCOPES)
-        deletePosts(FORM_ID, SCRIPT_ID, SCOPES)
+        uploadImgs(folder_id, imgs, names, scopes)
+        deletePosts(form_id, script_id, scopes)
         deleteConfessions("./confessions")
 def deleteConfessions(path):
     files = glob.glob(path + "/*")
     for f in files:
         os.remove(f)
-def getPosts():
-    resps = getResponses(FORM_ID, DISCOVERY_DOC, SCOPES)
+def getPosts(form_id, discover, scopes):
+    resps = getResponses(form_id, discover, scopes)
     print(resps)
 
 

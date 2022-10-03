@@ -5,7 +5,7 @@ from googleapiclient.errors import HttpError
 from googleapiclient.http import MediaFileUpload
 from PIL import Image
 from cliforms import getcreds
-
+import json
 
 def uploadImg(folder_id, img, img_name, scopes):
     creds = getcreds(scopes)
@@ -32,4 +32,6 @@ if __name__ == "__main__":
     img = Image.open("./confessions/img0.png")
     data = img.getdata()
     name = "img0.png"
-    uploadImg(folder_id, data, name, scopes)
+    with open("google_test.json") as f:
+        data = json.load(f)
+    uploadImg(data["folder_id"], data, name, scopes)
