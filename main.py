@@ -17,7 +17,7 @@ JSON FORMAT
 """
 
 
-def deleteConfessions(path):
+def deleteConfessions(path: str):
     files = glob.glob(path + "/*")
     for f in files:
         os.remove(f)

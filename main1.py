@@ -33,13 +33,13 @@ def main():
         deleteConfessions("./confessions")
 
 
-def deleteConfessions(path):
+def deleteConfessions(path: str):
     files = glob.glob(path + "/*")
     for f in files:
         os.remove(f)
 
 
-def getPosts(form_id, discover, scopes):
+def getPosts(form_id: str, discover: str, scopes: List[str]):
     resps = getResponses(form_id, discover, scopes)
     print(resps)
 
