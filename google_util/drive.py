@@ -4,7 +4,7 @@ from googleapiclient.discovery import build
 from googleapiclient.errors import HttpError
 from googleapiclient.http import MediaFileUpload
 from PIL import Image
-from cliforms import getcreds
+from google_util.cliforms import getcreds
 import json
 
 def uploadImg(folder_id, img, img_name, scopes):

@@ -1,5 +1,6 @@
 """
-FORM LINK : https://forms.gle/8B6tirfz8E5qydZ26
+LINK: https://docs.google.com/forms/d/e/1FAIpQLSe_fRARQb7S8Q5Y0O86vgaGueYNxQRGbZwbTa3keSR_fyMk8w/viewform?usp=sf_link
+
 """
 from google_util.cliforms import *
 from google_util.drive import uploadImgs
@@ -10,9 +11,9 @@ import json
 
 
 def main():
-    with open("./google_file_info/google_test.json") as file:
+    with open("google_file_info/google.json") as file:
         data = json.load(file)
-    with open("./google_file_info/constants.json") as file:
+    with open("google_file_info/constants.json") as file:
         constants = json.load(file)
     form_id = data["form_id"]
     folder_id = data["folder_id"]

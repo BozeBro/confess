@@ -1,5 +1,5 @@
 from PIL import Image
-from image_utils import ImageText
+from google_util.image_utils import ImageText
 from cleantext import clean
 from typing import List
 

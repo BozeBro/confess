@@ -1,10 +1,10 @@
 from __future__ import print_function
 
 from googleapiclient.discovery import build
-from post import makeManyIMG
+from google_util.post import makeManyIMG
 
 from typing import List
-from goo_utils import getcreds
+from google_util.goo_utils import getcreds
 
 
 
