@@ -5,7 +5,7 @@ LINK: https://docs.google.com/forms/d/e/1FAIpQLSe_fRARQb7S8Q5Y0O86vgaGueYNxQRGbZ
 from google_util.cliforms import *
 from google_util.drive import uploadImgs
 from google_util.post import saveImgs
-import os 
+import os
 import glob
 import json
 
@@ -20,8 +20,8 @@ def main():
 
     discovery_doc = constants["discovery_doc"]
     scopes = constants["scopes"]
-    script_id  = constants["script_id"]
-    
+    script_id = constants["script_id"]
+
     resp = getResponses(form_id, discovery_doc, scopes)
     if resp:
         imgs = list(transformRes(resp))
@@ -31,10 +31,14 @@ def main():
         uploadImgs(folder_id, imgs, names, scopes)
         deletePosts(form_id, script_id, scopes)
         deleteConfessions("./confessions")
+
+
 def deleteConfessions(path):
     files = glob.glob(path + "/*")
     for f in files:
         os.remove(f)
+
+
 def getPosts(form_id, discover, scopes):
     resps = getResponses(form_id, discover, scopes)
     print(resps)

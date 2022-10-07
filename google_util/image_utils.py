@@ -8,7 +8,7 @@ from PIL import Image, ImageDraw, ImageFont
 import PIL
 
 
-class ImageText(object):
+class ImageText:
     def __init__(
         self,
         filename_or_size_or_Image,

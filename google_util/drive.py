@@ -7,6 +7,7 @@ from PIL import Image
 from google_util.cliforms import getcreds
 import json
 
+
 def uploadImg(folder_id, img, img_name, scopes):
     creds = getcreds(scopes)
     service = build("drive", "v3", credentials=creds)

@@ -7,7 +7,6 @@ from typing import List
 from google_util.goo_utils import getcreds
 
 
-
 def getResponses(my_form_id: str, discovery: str, scopes: str):
     creds = getcreds(scopes)
     with open("token.json", "w") as token:
