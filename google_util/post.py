@@ -1,8 +1,9 @@
+
 from PIL import Image
 from google_util.image_utils import ImageText
 from cleantext import clean
 from typing import List
-
+import os.path
 # Cardo, bold, #8b0203
 # returns a PIL Image
 # Form link
@@ -61,17 +62,9 @@ def makeManyIMG(texts: List):
     return map(makeIMG, filter(lambda x: x.strip() != "", texts))
 
 
-def saveImgs(imgs):
-    with open("counter.txt", "r") as f:
-        val = f.read().strip()
-        counter = 0
-        if val.isnumeric():
-            counter = int(val)
-    for img in imgs:
-        img.save(f"./confessions/img{counter}.png")
-        counter += 1
-    with open("counter.txt", "w") as f:
-        f.write(str(counter))
+def saveImgs(imgs, folder, names):
+    for img, name in zip(imgs,names):
+        img.save(os.path.join(folder, name))
 
 
 if __name__ == "__main__":

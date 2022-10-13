@@ -35,7 +35,7 @@ def get_image():
         scopes = constants["scopes"]
         imgs = list(makeManyIMG(posts["confessions"]))
         names = makeNames(len(imgs))
-        saveImgs(imgs)
+        saveImgs(imgs, names)
         uploadImgs(folder_id, imgs, names, scopes)
         deleteConfessions("./confessions")
         return "true"

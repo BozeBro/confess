@@ -6,7 +6,7 @@ import glob
 import json
 
 
-def main(env="DEV"):
+def main(env="DEV", folder="./confessions"):
     if env == "PROD":
         with open("google_file_info/google.json") as file:
             data = json.load(file)
@@ -27,10 +27,10 @@ def main(env="DEV"):
         imgs = list(transformRes(resp))
         names = makeNames(len(imgs))
         print(len(imgs))
-        saveImgs(imgs)
-        uploadImgs(folder_id, names, scopes, True)
+        saveImgs(imgs, folder, names)
+        uploadImgs(folder_id, folder, names, scopes, True)
         deletePosts(form_id, script_id, scopes)
-        deleteConfessions("./confessions")
+        deleteConfessions(folder)
 
 
 def deleteConfessions(path: str):

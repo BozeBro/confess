@@ -5,10 +5,11 @@ from googleapiclient.errors import HttpError
 from googleapiclient.http import MediaFileUpload
 from PIL import Image
 from google_util.goo_utils import getcreds, getservice
+import os.path
 import json
 
 
-def uploadImg(folder_id, img_name, scopes, oauth):
+def uploadImg(folder_id, folder, img_name, scopes, oauth):
     if oauth:
         creds = getcreds(scopes)
     else:
@@ -17,7 +18,7 @@ def uploadImg(folder_id, img_name, scopes, oauth):
 
     file_metadata = {"name": img_name, "parents": [folder_id]}
     media = MediaFileUpload(
-        "./confessions/" + img_name, mimetype="image/png", resumable=True
+        os.path.join(folder, img_name), mimetype="image/png", resumable=True
     )
     file = (
         service.files()
@@ -26,9 +27,9 @@ def uploadImg(folder_id, img_name, scopes, oauth):
     )
 
 
-def uploadImgs(folder_id, img_names, scopes, oauth=False):
+def uploadImgs(folder_id, folder, img_names, scopes, oauth=False):
     for name in img_names:
-        uploadImg(folder_id, name, scopes, oauth)
+        uploadImg(folder_id, folder, name, scopes, oauth)
 
 
 if __name__ == "__main__":

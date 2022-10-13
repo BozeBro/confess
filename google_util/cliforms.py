@@ -4,6 +4,7 @@ from googleapiclient.discovery import build
 from google_util.post import makeManyIMG
 
 from typing import List
+from datetime import datetime
 from google_util.goo_utils import getcreds
 
 def getResponses(my_form_id: str, discovery: str, scopes: str):
@@ -16,16 +17,11 @@ def getResponses(my_form_id: str, discovery: str, scopes: str):
 
 
 def makeNames(n: int) -> List[str]:
-    with open("./counter.txt") as f:
-        val = f.read().strip()
-        counter = 0
-        if val.isnumeric():
-            counter = int(val)
-    names = []
-    for i in range(n):
-        names.append(f"img{counter + i}.png")
-    return names
-
+    date = str(datetime.now())
+    return [f"{date}+{i}.png" for i in range(n)]
+def makePaths(n: int, folder_path: str) -> List[str]:
+    date = str(datetime.now())
+    return [f"{folder_path}/{date}+{i}.png" for i in range(n)]
 
 def transformRes(responses):
     submissions = []
