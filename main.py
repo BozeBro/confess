@@ -1,7 +1,7 @@
 from flask import Flask, request
 from main1 import deleteConfessions
-from google_util.post import makeManyIMG, saveImgs
-from google_util.cliforms import makeNames
+from google_util.post import makeManyIMG
+from google_util.database import makeNames, saveImgs
 from google_util.drive import uploadImgs
 import json
 import glob
@@ -29,7 +29,7 @@ def get_image():
     if posts:
         with open("google_file_info/google_test.json") as file:
             data = json.load(file)
-        with open("constants.json") as file:
+        with open("google_file_info/constants.json") as file:
             constants = json.load(file)
         folder_id = data["folder_id"]
         scopes = constants["scopes"]

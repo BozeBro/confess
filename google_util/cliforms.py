@@ -6,10 +6,9 @@ from google_util.post import makeManyIMG
 from typing import List
 from google_util.goo_utils import getcreds
 
-
 def getResponses(my_form_id: str, discovery: str, scopes: str):
     creds = getcreds(scopes)
-    with open("token.json", "w") as token:
+    with open("./token.json", "w") as token:
         token.write(creds.to_json())
     with build("forms", "v1", credentials=creds, discoveryServiceUrl=discovery) as user:
         resps = user.forms().responses().list(formId=my_form_id).execute()
@@ -17,7 +16,7 @@ def getResponses(my_form_id: str, discovery: str, scopes: str):
 
 
 def makeNames(n: int) -> List[str]:
-    with open("counter.txt") as f:
+    with open("./counter.txt") as f:
         val = f.read().strip()
         counter = 0
         if val.isnumeric():
@@ -43,6 +42,7 @@ def deletePosts(form_id: str, scriptId: str, scopes: str) -> None:
     creds = getcreds(scopes)
 
     service = build("script", "v1", credentials=creds)
-    req = {"function": "myFunction", "parameters": [form_id]}
+    req = {"function": "deleteSubmissions", "parameters": [form_id]}
 
     res = service.scripts().run(body=req, scriptId=scriptId).execute()
+    print(res)
