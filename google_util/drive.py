@@ -30,13 +30,3 @@ def uploadImg(folder_id, folder, img_name, scopes, oauth):
 def uploadImgs(folder_id, folder, img_names, scopes, oauth=False):
     for name in img_names:
         uploadImg(folder_id, folder, name, scopes, oauth)
-
-
-if __name__ == "__main__":
-    scopes = ["https://www.googleapis.com/auth/drive"]
-    img = Image.open("./confessions/img0.png")
-    data = img.getdata()
-    name = "img0.png"
-    with open("../google_file_info/google_test.json") as f:
-        data = json.load(f)
-    uploadImg(data["folder_id"], data, name, scopes)
