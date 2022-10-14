@@ -22,13 +22,13 @@ def main(env="DEV", folder="./confessions"):
     scopes = constants["old_scopes"]
     script_id = constants["script_id"]
 
-    resp = getResponses(form_id, discovery_doc, scopes)
+    resp = getResponses(form_id, discovery_doc, scopes, True)
     if resp:
         imgs = list(transformRes(resp))
         names = makeNames(len(imgs))
         print(len(imgs))
         saveImgs(imgs, folder, names)
-        uploadImgs(folder_id, folder, names, scopes, True)
+        uploadImgs(folder_id, folder, scopes, True)
         deletePosts(form_id, script_id, scopes)
         deleteConfessions(folder)
 
@@ -42,7 +42,6 @@ def deleteConfessions(path: str):
 def getPosts(form_id: str, discover: str, scopes: List[str]):
     resps = getResponses(form_id, discover, scopes)
     print(resps)
-
 
 if __name__ == "__main__":
     main("PROD")

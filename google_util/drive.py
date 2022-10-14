@@ -6,7 +6,6 @@ from googleapiclient.http import MediaFileUpload
 from PIL import Image
 from google_util.goo_utils import getcreds, getservice
 import os.path
-import json
 
 
 def uploadImg(folder_id, folder, img_name, scopes, oauth):
@@ -26,7 +25,6 @@ def uploadImg(folder_id, folder, img_name, scopes, oauth):
         .execute()
     )
 
-
-def uploadImgs(folder_id, folder, img_names, scopes, oauth=False):
-    for name in img_names:
-        uploadImg(folder_id, folder, name, scopes, oauth)
+def uploadImgs(folder_id, folder, scopes, oauth=False):
+    for file in os.scandir(folder):
+        uploadImg(folder_id, folder, os.path.basename(file.name), scopes, oauth)

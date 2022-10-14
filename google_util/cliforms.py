@@ -5,10 +5,13 @@ from google_util.post import makeManyIMG
 
 from typing import List
 from datetime import datetime
-from google_util.goo_utils import getcreds
+from google_util.goo_utils import getcreds, getservice
 
-def getResponses(my_form_id: str, discovery: str, scopes: str):
-    creds = getcreds(scopes)
+def getResponses(my_form_id: str, discovery: str, scopes: str, oauth=False):
+    if oauth:
+        creds = getcreds(scopes)
+    else:
+        creds = getservice(scopes)
     with open("./token.json", "w") as token:
         token.write(creds.to_json())
     with build("forms", "v1", credentials=creds, discoveryServiceUrl=discovery) as user:
@@ -19,9 +22,6 @@ def getResponses(my_form_id: str, discovery: str, scopes: str):
 def makeNames(n: int) -> List[str]:
     date = str(datetime.now())
     return [f"{date}+{i}.png" for i in range(n)]
-def makePaths(n: int, folder_path: str) -> List[str]:
-    date = str(datetime.now())
-    return [f"{folder_path}/{date}+{i}.png" for i in range(n)]
 
 def transformRes(responses):
     submissions = []
