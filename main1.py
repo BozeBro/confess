@@ -1,6 +1,7 @@
 from google_util.cliforms import *
-from google_util.drive import uploadImgs
+from google_util.drive import uploadImgs, uploadImgsV2
 from google_util.post import saveImgs
+from google_util.goo_utils import service_account, getcreds
 import os
 import glob
 import json
@@ -21,16 +22,13 @@ def main(env="DEV", folder="./confessions"):
     discovery_doc = constants["discovery_doc"]
     scopes = constants["old_scopes"]
     script_id = constants["script_id"]
-
-    resp = getResponses(form_id, discovery_doc, scopes, True)
+    creds = getcreds(scopes)
+    resp = getResponses(form_id, discovery_doc, scopes, creds=creds)
     if resp:
-        imgs = list(transformRes(resp))
-        names = makeNames(len(imgs))
-        print(len(imgs))
-        saveImgs(imgs, folder, names)
-        uploadImgs(folder_id, folder, scopes, True)
+        print(len(resp["responses"]))
+        imgs = transformRes(resp)
+        uploadImgsV2(folder_id, imgs, scopes, creds=creds)
         deletePosts(form_id, script_id, scopes)
-        deleteConfessions(folder)
 
 
 def deleteConfessions(path: str):

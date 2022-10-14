@@ -7,11 +7,12 @@ from typing import List
 from datetime import datetime
 from google_util.goo_utils import getcreds, getservice
 
-def getResponses(my_form_id: str, discovery: str, scopes: str, oauth=False):
-    if oauth:
-        creds = getcreds(scopes)
-    else:
-        creds = getservice(scopes)
+def getResponses(my_form_id: str, discovery: str, scopes: str, oauth=False, creds = None):
+    if not creds:
+        if oauth:
+            creds = getcreds(scopes)
+        else:
+            creds = getservice(scopes)
     with open("./token.json", "w") as token:
         token.write(creds.to_json())
     with build("forms", "v1", credentials=creds, discoveryServiceUrl=discovery) as user:
