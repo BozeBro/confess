@@ -1,13 +1,10 @@
 from google_util.cliforms import *
-from google_util.drive import uploadImgs, uploadImgsV2
-from google_util.post import saveImgs
+from google_util.drive import uploadImgsV2
 from google_util.goo_utils import service_account, getcreds
-import os
-import glob
 import json
 
 
-def main(env="DEV", folder="./confessions"):
+def main(env="DEV"):
     if env == "PROD":
         with open("google_file_info/google.json") as file:
             data = json.load(file)
@@ -15,7 +12,7 @@ def main(env="DEV", folder="./confessions"):
         with open("google_file_info/google_test.json") as file:
             data = json.load(file)
     with open("google_file_info/constants.json") as file:
-            constants = json.load(file)
+        constants = json.load(file)
     form_id = data["form_id"]
     folder_id = data["folder_id"]
 
@@ -30,16 +27,6 @@ def main(env="DEV", folder="./confessions"):
         uploadImgsV2(folder_id, imgs, scopes, creds=creds)
         deletePosts(form_id, script_id, scopes)
 
-
-def deleteConfessions(path: str):
-    files = glob.glob(path + "/*")
-    for f in files:
-        os.remove(f)
-
-
-def getPosts(form_id: str, discover: str, scopes: List[str]):
-    resps = getResponses(form_id, discover, scopes)
-    print(resps)
 
 if __name__ == "__main__":
     main("PROD")

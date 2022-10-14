@@ -3,11 +3,10 @@ from __future__ import print_function
 from googleapiclient.discovery import build
 from google_util.post import makeManyIMG
 
-from typing import List
-from datetime import datetime
 from google_util.goo_utils import getcreds, getservice
 
-def getResponses(my_form_id: str, discovery: str, scopes: str, oauth=False, creds = None):
+
+def getResponses(my_form_id: str, discovery: str, scopes: str, oauth=False, creds=None):
     if not creds:
         if oauth:
             creds = getcreds(scopes)
@@ -19,10 +18,6 @@ def getResponses(my_form_id: str, discovery: str, scopes: str, oauth=False, cred
         resps = user.forms().responses().list(formId=my_form_id).execute()
     return resps
 
-
-def makeNames(n: int) -> List[str]:
-    date = str(datetime.now())
-    return [f"{date}+{i}.png" for i in range(n)]
 
 def transformRes(responses):
     submissions = []

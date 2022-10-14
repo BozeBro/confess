@@ -5,6 +5,7 @@ from google_auth_oauthlib.flow import InstalledAppFlow
 from typing import List
 from google.oauth2 import service_account
 
+
 def getcreds(scopes: List[str]) -> Credentials:
     creds = None
     # The file token.json stores the user's access and refresh tokens, and is
@@ -17,14 +18,18 @@ def getcreds(scopes: List[str]) -> Credentials:
         if creds and creds.expired and creds.refresh_token:
             creds.refresh(Request())
         else:
-            flow = InstalledAppFlow.from_client_secrets_file("./credentials.json", scopes)
+            flow = InstalledAppFlow.from_client_secrets_file(
+                "./credentials.json", scopes
+            )
             creds = flow.run_local_server(port=0)
         # Save the credentials for the next run
         with open("token.json", "w") as token:
             token.write(creds.to_json())
     return creds
+
+
 def getservice(scopes: List[str]):
-    creds = (service_account.Credentials
-        .from_service_account_file("my_robot.json")
-        .with_scopes(scopes))
+    creds = service_account.Credentials.from_service_account_file(
+        "my_robot.json"
+    ).with_scopes(scopes)
     return creds

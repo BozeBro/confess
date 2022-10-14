@@ -1,9 +1,8 @@
-
 from PIL import Image
 from google_util.image_utils import ImageText
 from cleantext import clean
 from typing import List
-import os.path
+
 # Cardo, bold, #8b0203
 # returns a PIL Image
 # Form link
@@ -60,11 +59,6 @@ def makeIMG(text: str) -> Image:
 
 def makeManyIMG(texts: List):
     return map(makeIMG, filter(lambda x: x.strip() != "", texts))
-
-
-def saveImgs(imgs, folder, names):
-    for img, name in zip(imgs,names):
-        img.save(os.path.join(folder, name))
 
 
 if __name__ == "__main__":
