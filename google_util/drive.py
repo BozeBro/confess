@@ -19,7 +19,7 @@ def uploadImgsV2(folder_id, imgs, scopes, oauth=False, creds=None):
         name = f"{date}+{ind}.png"
         bytesIO = io.BytesIO()
         img.save(bytesIO, format="PNG")
-        media = MediaIoBaseUpload(bytesIO, "image/png", -1, True)
+        media = MediaIoBaseUpload(bytesIO, "image/png", -1, False)
         file_metadata = {"name": name, "parents": [folder_id]}
         file = (
             service.files()
