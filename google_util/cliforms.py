@@ -10,10 +10,10 @@ def getResponses(my_form_id: str, discovery: str, scopes: str, oauth=False, cred
     if not creds:
         if oauth:
             creds = getcreds(scopes)
+            with open("./token.json", "w") as token:
+                token.write(creds.to_json())
         else:
             creds = getservice(scopes)
-    with open("./token.json", "w") as token:
-        token.write(creds.to_json())
     with build("forms", "v1", credentials=creds, discoveryServiceUrl=discovery) as user:
         resps = user.forms().responses().list(formId=my_form_id).execute()
     return resps
